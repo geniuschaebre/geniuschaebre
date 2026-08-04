@@ -1,132 +1,157 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boss Shooter</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOSS SHOOTER</title>
 
-<div id="menu">
-    <h1>BOSS SHOOTER</h1>
-    <p>최강의 보스를 쓰러뜨려라!</p>
-
-    <button id="startBtn">🎮 게임 시작</button>
-    <button id="howBtn">📖 게임 방법</button>
-    <button id="settingBtn">⚙ 설정</button>
-
-    <div id="howToPlay" class="hidden">
-        <h2>조작법</h2>
-        <p>W A S D : 이동</p>
-        <p>마우스 : 조준</p>
-        <p>좌클릭 : 총 발사</p>
-        <p>Shift : 대시</p>
-        <button id="closeBtn">닫기</button>
-    </div>
-</div>
-
-<canvas id="gameCanvas"></canvas>
-
-<script src="script.js"></script>
-
-</body>
-</html>
-body{
+<style>
+*{
     margin:0;
-    background:#111;
-    color:white;
+    padding:0;
+    box-sizing:border-box;
     font-family:Arial, sans-serif;
-    overflow:hidden;
 }
 
-#menu{
-    position:absolute;
-    width:100%;
-    height:100%;
+body{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:linear-gradient(180deg,#0f172a,#000);
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(#222,#000);
+    color:white;
+}
+
+.menu{
+    text-align:center;
 }
 
 h1{
-    font-size:70px;
-    color:#ff4040;
-    margin-bottom:10px;
+    font-size:80px;
+    color:#ff3b3b;
     text-shadow:0 0 20px red;
+    margin-bottom:15px;
 }
 
-p{
-    font-size:22px;
+.subtitle{
+    font-size:24px;
+    color:#dddddd;
+    margin-bottom:50px;
 }
 
 button{
-    width:240px;
+    width:260px;
     height:60px;
     margin:10px;
-    font-size:24px;
     border:none;
-    border-radius:15px;
-    cursor:pointer;
-    background:#ff4040;
+    border-radius:12px;
+    background:#ff3b3b;
     color:white;
+    font-size:24px;
+    cursor:pointer;
     transition:0.3s;
 }
 
 button:hover{
     transform:scale(1.08);
-    background:#ff7070;
+    background:#ff6060;
 }
 
-.hidden{
-    display:none;
+.version{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    color:#888;
 }
 
-#howToPlay{
-    margin-top:20px;
-    text-align:center;
+#stars{
+    position:fixed;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="menu">
+
+    <h1>BOSS SHOOTER</h1>
+
+    <div class="subtitle">
+        최강의 보스를 쓰러뜨려라!
+    </div>
+
+    <button onclick="startGame()">🎮 게임 시작</button><br>
+
+    <button onclick="alert('준비 중입니다.')">📖 게임 방법</button><br>
+
+    <button onclick="alert('준비 중입니다.')">⚙ 설정</button><br>
+
+    <button onclick="alert('감사합니다!')">🚪 종료</button>
+
+</div>
+
+<div class="version">
+v1.0
+</div>
+
+<script>
+function startGame(){
+    alert("게임이 시작됩니다!");
 }
 
-canvas{
-    display:none;
-    background:#222;
-}
-const startBtn = document.getElementById("startBtn");
-const howBtn = document.getElementById("howBtn");
-const settingBtn = document.getElementById("settingBtn");
-const closeBtn = document.getElementById("closeBtn");
+// 별 배경
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
 
-const menu = document.getElementById("menu");
-const canvas = document.getElementById("gameCanvas");
-const how = document.getElementById("howToPlay");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-startBtn.onclick = () => {
+const stars = [];
 
-    menu.style.display = "none";
-
-    canvas.style.display = "block";
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "white";
-    ctx.font = "50px Arial";
-    ctx.fillText("게임 시작!", canvas.width/2-120, canvas.height/2);
-
-};
-
-howBtn.onclick = ()=>{
-    how.classList.remove("hidden");
+for(let i=0;i<150;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2+1,
+        s:Math.random()*0.6+0.2
+    });
 }
 
-closeBtn.onclick = ()=>{
-    how.classList.add("hidden");
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="white";
+
+    for(const star of stars){
+        ctx.beginPath();
+        ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+        ctx.fill();
+
+        star.y += star.s;
+
+        if(star.y > canvas.height){
+            star.y = 0;
+            star.x = Math.random()*canvas.width;
+        }
+    }
+
+    requestAnimationFrame(draw);
 }
 
-settingBtn.onclick = ()=>{
-    alert("설정은 다음 단계에서 추가됩니다.");
+draw();
+
+window.onresize=()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
 }
+</script>
+
+</body>
+</html>

@@ -1,81 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
+
 <meta charset="UTF-8">
+
 <title>천재채호 - 실시간 지진 지도</title>
+
 
 <style>
 
 *{
+
 margin:0;
 padding:0;
 box-sizing:border-box;
+
 }
+
 
 body{
+
 overflow:hidden;
+
 font-family:"Malgun Gothic";
+
 }
 
-
-/* 지진 버튼 */
-#quakeBtn{
-position:absolute;
-top:20px;
-right:20px;
-z-index:20;
-
-background:#ff3333;
-color:white;
-
-border:none;
-padding:15px 25px;
-
-font-size:20px;
-font-weight:bold;
-
-border-radius:10px;
-cursor:pointer;
-}
-
-
-/* 지도 */
 
 #map{
 
 width:100vw;
-height:100vh;
 
-background:
-linear-gradient(#dfe3e5,#bfc5c8);
+height:100vh;
 
 position:relative;
 
-}
-
-
-/* 세계지도 느낌 */
-
-#map:before{
-
-content:"";
-
-position:absolute;
-
-inset:0;
 
 background-image:
 
-url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='500'%3E%3Crect width='100%25' height='100%25' fill='%23cfd3d4'/%3E%3Cpath d='M100 180 Q300 50 500 180 T900 150' fill='none' stroke='%23999' stroke-width='40'/%3E%3C/svg%3E");
+url("https://upload.wikimedia.org/wikipedia/commons/8/83/Earthmap1000x500.jpg");
 
 background-size:cover;
-
-opacity:.5;
 
 }
 
 
-/* 제목 */
 
 #title{
 
@@ -93,14 +63,41 @@ color:white;
 
 padding:15px;
 
-border-radius:10px;
+font-size:28px;
 
-font-size:25px;
+border-radius:10px;
 
 }
 
 
-/* 지진 표시 */
+
+#back{
+
+position:absolute;
+
+top:20px;
+
+right:20px;
+
+z-index:10;
+
+background:blue;
+
+color:white;
+
+border:none;
+
+padding:15px 25px;
+
+font-size:20px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+
+
 
 .quake{
 
@@ -111,14 +108,16 @@ background:red;
 border-radius:50%;
 
 box-shadow:
+
 0 0 10px red,
+
 0 0 25px red;
+
 
 animation:pulse 1s infinite;
 
-cursor:pointer;
-
 }
+
 
 
 @keyframes pulse{
@@ -132,7 +131,6 @@ transform:scale(1.8);
 }
 
 
-/* 정보 */
 
 #info{
 
@@ -141,8 +139,6 @@ position:absolute;
 bottom:20px;
 
 left:20px;
-
-z-index:10;
 
 background:rgba(0,0,0,.7);
 
@@ -155,18 +151,14 @@ border-radius:10px;
 }
 
 
+
 </style>
+
 
 </head>
 
 
 <body>
-
-
-<!-- 지진 버튼 -->
-<button id="quakeBtn" onclick="location.href='earth.html'">
-🌋 지진
-</button>
 
 
 <div id="map">
@@ -177,22 +169,29 @@ border-radius:10px;
 </div>
 
 
+<button id="back" onclick="location.href='index.html'">
+⬅ 돌아가기
+</button>
+
+
 <div id="info">
-데이터 불러오는 중...
+지진 데이터 불러오는 중...
 </div>
 
 
 </div>
+
 
 
 
 <script>
 
+
 const map=document.getElementById("map");
+
 const info=document.getElementById("info");
 
 
-// 위도 경도 위치 변환
 
 function position(lat,lon){
 
@@ -208,19 +207,18 @@ y:(90-lat)/180*100
 
 
 
-// 실시간 지진 데이터
-
 async function earthquake(){
+
 
 try{
 
 
-let url=
-"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
-
-
 let data=
-await fetch(url).then(r=>r.json());
+
+await fetch(
+"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
+)
+.then(r=>r.json());
 
 
 
@@ -231,8 +229,7 @@ document.querySelectorAll(".quake")
 
 info.innerHTML=
 "최근 24시간 지진 : "
-+data.features.length+
-"개";
++data.features.length+"개";
 
 
 
@@ -244,9 +241,6 @@ let lon=e.geometry.coordinates[0];
 let lat=e.geometry.coordinates[1];
 
 let mag=e.properties.mag;
-
-let place=e.properties.place;
-
 
 
 let p=position(lat,lon);
@@ -263,7 +257,6 @@ dot.style.left=p.x+"%";
 dot.style.top=p.y+"%";
 
 
-
 let size=8+mag*5;
 
 
@@ -277,7 +270,7 @@ dot.onclick=()=>{
 
 alert(
 "규모 : "+mag+
-"\n위치 : "+place
+"\n위치 : "+e.properties.place
 );
 
 };
@@ -292,7 +285,7 @@ map.appendChild(dot);
 
 }
 
-catch(error){
+catch{
 
 info.innerHTML=
 "지진 데이터를 가져올 수 없습니다.";
@@ -306,9 +299,6 @@ info.innerHTML=
 
 earthquake();
 
-
-// 1분마다 갱신
-
 setInterval(earthquake,60000);
 
 
@@ -316,4 +306,5 @@ setInterval(earthquake,60000);
 
 
 </body>
+
 </html>

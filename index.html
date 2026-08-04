@@ -1,83 +1,132 @@
-baseball-game/
-│
-├── index.html
-├── style.css
-├── script.js
-└── README.md
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>야구 게임</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss Shooter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>⚾ 야구 게임</h1>
+<div id="menu">
+    <h1>BOSS SHOOTER</h1>
+    <p>최강의 보스를 쓰러뜨려라!</p>
 
-<div id="score">
-    <h2>점수</h2>
-    <p>컴퓨터 : <span id="cpu">0</span></p>
-    <p>플레이어 : <span id="player">0</span></p>
+    <button id="startBtn">🎮 게임 시작</button>
+    <button id="howBtn">📖 게임 방법</button>
+    <button id="settingBtn">⚙ 설정</button>
+
+    <div id="howToPlay" class="hidden">
+        <h2>조작법</h2>
+        <p>W A S D : 이동</p>
+        <p>마우스 : 조준</p>
+        <p>좌클릭 : 총 발사</p>
+        <p>Shift : 대시</p>
+        <button id="closeBtn">닫기</button>
+    </div>
 </div>
 
-<button id="hit">배트 휘두르기</button>
-
-<p id="result">게임 시작!</p>
+<canvas id="gameCanvas"></canvas>
 
 <script src="script.js"></script>
 
 </body>
 </html>
 body{
-    font-family: Arial;
-    text-align:center;
-    background:#2e8b57;
+    margin:0;
+    background:#111;
     color:white;
+    font-family:Arial, sans-serif;
+    overflow:hidden;
+}
+
+#menu{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(#222,#000);
+}
+
+h1{
+    font-size:70px;
+    color:#ff4040;
+    margin-bottom:10px;
+    text-shadow:0 0 20px red;
+}
+
+p{
+    font-size:22px;
 }
 
 button{
-    padding:15px 30px;
-    font-size:20px;
-    margin-top:20px;
+    width:240px;
+    height:60px;
+    margin:10px;
+    font-size:24px;
+    border:none;
+    border-radius:15px;
     cursor:pointer;
+    background:#ff4040;
+    color:white;
+    transition:0.3s;
 }
 
-#score{
-    background:white;
-    color:black;
-    width:250px;
-    margin:auto;
-    border-radius:10px;
-    padding:10px;
+button:hover{
+    transform:scale(1.08);
+    background:#ff7070;
 }
-let player = 0;
-let cpu = 0;
 
-const result = document.getElementById("result");
+.hidden{
+    display:none;
+}
 
-document.getElementById("hit").addEventListener("click", function(){
+#howToPlay{
+    margin-top:20px;
+    text-align:center;
+}
 
-    let hit = Math.floor(Math.random()*100)+1;
+canvas{
+    display:none;
+    background:#222;
+}
+const startBtn = document.getElementById("startBtn");
+const howBtn = document.getElementById("howBtn");
+const settingBtn = document.getElementById("settingBtn");
+const closeBtn = document.getElementById("closeBtn");
 
-    if(hit <= 10){
-        result.innerHTML = "💥 홈런!";
-        player += 4;
-    }
-    else if(hit <= 40){
-        result.innerHTML = "⚾ 안타!";
-        player += 1;
-    }
-    else if(hit <= 60){
-        result.innerHTML = "🚶 볼넷!";
-        player += 1;
-    }
-    else{
-        result.innerHTML = "❌ 아웃!";
-    }
+const menu = document.getElementById("menu");
+const canvas = document.getElementById("gameCanvas");
+const how = document.getElementById("howToPlay");
 
-    cpu += Math.floor(Math.random()*2);
+startBtn.onclick = () => {
 
-    document.getElementById("player").innerHTML = player;
-    document.getElementById("cpu").innerHTML = cpu;
-});
+    menu.style.display = "none";
+
+    canvas.style.display = "block";
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "white";
+    ctx.font = "50px Arial";
+    ctx.fillText("게임 시작!", canvas.width/2-120, canvas.height/2);
+
+};
+
+howBtn.onclick = ()=>{
+    how.classList.remove("hidden");
+}
+
+closeBtn.onclick = ()=>{
+    how.classList.add("hidden");
+}
+
+settingBtn.onclick = ()=>{
+    alert("설정은 다음 단계에서 추가됩니다.");
+}

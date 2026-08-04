@@ -3,155 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOSS SHOOTER</title>
+<title>천재채호 - 보스전</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
 }
 
 body{
-    width:100vw;
-    height:100vh;
+    background:linear-gradient(#111,#000);
     overflow:hidden;
-    background:linear-gradient(180deg,#0f172a,#000);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
+    font-family:"Malgun Gothic", sans-serif;
+}
+
+/* 움직이는 배경 */
+body::before{
+    content:"";
+    position:fixed;
+    width:200%;
+    height:200%;
+    background:
+        radial-gradient(white 1px, transparent 1px);
+    background-size:50px 50px;
+    opacity:0.15;
+    animation:stars 40s linear infinite;
+}
+
+@keyframes stars{
+    from{transform:translateY(0);}
+    to{transform:translateY(-500px);}
 }
 
 .menu{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
     text-align:center;
 }
 
 h1{
     font-size:80px;
-    color:#ff3b3b;
-    text-shadow:0 0 20px red;
+    color:#ff3030;
+    text-shadow:
+        0 0 10px red,
+        0 0 20px red,
+        0 0 40px red;
     margin-bottom:15px;
 }
 
-.subtitle{
-    font-size:24px;
-    color:#dddddd;
-    margin-bottom:50px;
+h2{
+    font-size:38px;
+    color:gold;
+    margin-bottom:30px;
+}
+
+p{
+    font-size:22px;
+    color:#ddd;
+    margin-bottom:40px;
 }
 
 button{
     width:260px;
-    height:60px;
+    height:65px;
     margin:10px;
-    border:none;
-    border-radius:12px;
-    background:#ff3b3b;
-    color:white;
     font-size:24px;
+    border:none;
+    border-radius:15px;
     cursor:pointer;
-    transition:0.3s;
+    background:#ff3030;
+    color:white;
+    transition:.25s;
+    box-shadow:0 0 15px red;
 }
 
 button:hover{
     transform:scale(1.08);
-    background:#ff6060;
+    background:#ff5a5a;
 }
 
 .version{
-    position:fixed;
+    position:absolute;
     bottom:20px;
-    right:20px;
-    color:#888;
-}
-
-#stars{
-    position:fixed;
-    width:100%;
-    height:100%;
-    pointer-events:none;
+    color:#777;
+    font-size:16px;
 }
 </style>
-
 </head>
-<body>
 
-<canvas id="stars"></canvas>
+<body>
 
 <div class="menu">
 
-    <h1>BOSS SHOOTER</h1>
+<h1>천재채호</h1>
 
-    <div class="subtitle">
-        최강의 보스를 쓰러뜨려라!
-    </div>
+<h2>⚔️ BOSS SHOOTER ⚔️</h2>
 
-    <button onclick="startGame()">🎮 게임 시작</button><br>
+<p>
+최강의 보스를 물리쳐라!<br>
+총알을 피하고 승리를 쟁취하라!
+</p>
 
-    <button onclick="alert('준비 중입니다.')">📖 게임 방법</button><br>
+<button onclick="alert('게임 시작!')">🎮 게임 시작</button>
 
-    <button onclick="alert('준비 중입니다.')">⚙ 설정</button><br>
+<button onclick="alert('조작법\n\nWASD : 이동\n마우스 : 조준\n좌클릭 : 발사\nShift : 대시')">
+📖 게임 방법
+</button>
 
-    <button onclick="alert('감사합니다!')">🚪 종료</button>
-
-</div>
+<button onclick="alert('설정은 준비 중입니다.')">
+⚙️ 설정
+</button>
 
 <div class="version">
-v1.0
+Made by 천재채호
 </div>
 
-<script>
-function startGame(){
-    alert("게임이 시작됩니다!");
-}
-
-// 별 배경
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const stars = [];
-
-for(let i=0;i<150;i++){
-    stars.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
-        r:Math.random()*2+1,
-        s:Math.random()*0.6+0.2
-    });
-}
-
-function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    ctx.fillStyle="white";
-
-    for(const star of stars){
-        ctx.beginPath();
-        ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
-        ctx.fill();
-
-        star.y += star.s;
-
-        if(star.y > canvas.height){
-            star.y = 0;
-            star.x = Math.random()*canvas.width;
-        }
-    }
-
-    requestAnimationFrame(draw);
-}
-
-draw();
-
-window.onresize=()=>{
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-}
-</script>
+</div>
 
 </body>
 </html>

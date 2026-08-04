@@ -14,158 +14,93 @@
 }
 
 body{
-    background:linear-gradient(#111,#000);
+    background:#000;
     overflow:hidden;
     font-family:"Malgun Gothic",sans-serif;
-}
-
-
-/* 별 배경 */
-body::before{
-    content:"";
-    position:fixed;
-    width:200%;
-    height:200%;
-    background:radial-gradient(white 1px,transparent 1px);
-    background-size:50px 50px;
-    opacity:0.15;
-    animation:stars 40s linear infinite;
-}
-
-@keyframes stars{
-    from{
-        transform:translateY(0);
-    }
-    to{
-        transform:translateY(-500px);
-    }
+    color:white;
 }
 
 
 .menu{
-    position:absolute;
     width:100%;
-    height:100%;
+    height:100vh;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    color:white;
     text-align:center;
 }
 
 
 h1{
     font-size:80px;
-    color:#ff3030;
-    text-shadow:
-    0 0 10px red,
-    0 0 20px red,
-    0 0 40px red;
-    margin-bottom:15px;
+    color:red;
+    text-shadow:0 0 20px red;
 }
 
 
 h2{
-    font-size:38px;
     color:gold;
-    margin-bottom:30px;
+    font-size:38px;
+    margin:20px;
 }
 
 
 p{
     font-size:22px;
-    color:#ddd;
-    line-height:1.6;
-    margin-bottom:40px;
+    margin:20px;
 }
 
 
-
 button{
-
     width:260px;
     height:65px;
-
     margin:10px;
-
     font-size:24px;
-
     border:none;
-
     border-radius:15px;
-
-    cursor:pointer;
-
-    background:#ff3030;
-
+    background:red;
     color:white;
-
-    box-shadow:0 0 15px red;
-
-    transition:.25s;
+    cursor:pointer;
 }
 
 
 button:hover{
-
-    transform:scale(1.08);
-
-    background:#ff5a5a;
-
+    transform:scale(1.1);
 }
 
 
-
-#howToPlay{
-
+#guide{
     display:none;
-
-    background:rgba(0,0,0,0.8);
-
-    padding:20px;
-
-    border-radius:15px;
-
+    background:#222;
     border:2px solid red;
-
+    padding:20px;
+    border-radius:15px;
 }
 
 
-
-#howToPlay h3{
-
-    color:gold;
-
-    margin-bottom:10px;
-
+#earth{
+    display:none;
+    width:100%;
+    height:100vh;
+    background:
+    linear-gradient(#001,#004),
+    url("https://upload.wikimedia.org/wikipedia/commons/8/83/Earthmap1000x500.jpg");
+    background-size:cover;
+    text-align:center;
+    padding-top:200px;
 }
 
 
-
-#howToPlay button{
-
-    width:150px;
-
-    height:45px;
-
-    font-size:18px;
-
+#earth h1{
+    color:cyan;
 }
 
 
-
-.version{
-
-    position:absolute;
-
-    bottom:20px;
-
-    color:#777;
-
-    font-size:16px;
-
+.back{
+    background:blue;
 }
+
 
 </style>
 
@@ -175,7 +110,9 @@ button:hover{
 <body>
 
 
-<div class="menu">
+<!-- 메인 화면 -->
+
+<div class="menu" id="main">
 
 
 <h1>천재채호</h1>
@@ -201,13 +138,13 @@ button:hover{
 </button>
 
 
-<button onclick="goEarth()">
+<button onclick="earthPage()">
 🌎 지진
 </button>
 
 
 
-<div id="howToPlay">
+<div id="guide">
 
 <h3>게임 방법</h3>
 
@@ -223,16 +160,38 @@ Shift : 대시
 닫기
 </button>
 
+
+</div>
+
+
 </div>
 
 
 
-<div class="version">
-Made by 천재채호
-</div>
+
+
+<!-- 지진 화면 -->
+
+<div id="earth">
+
+
+<h1>🌎 지진 시스템</h1>
+
+
+<p>
+세계 지도<br>
+지진 정보를 확인하는 곳
+</p>
+
+
+<button class="back" onclick="backHome()">
+⬅ 돌아가기
+</button>
 
 
 </div>
+
+
 
 
 
@@ -241,7 +200,7 @@ Made by 천재채호
 
 function startGame(){
 
-    location.href="main.html";
+    alert("main 게임 시작!");
 
 }
 
@@ -249,7 +208,7 @@ function startGame(){
 
 function showGuide(){
 
-    document.getElementById("howToPlay").style.display="block";
+    document.getElementById("guide").style.display="block";
 
 }
 
@@ -257,22 +216,34 @@ function showGuide(){
 
 function hideGuide(){
 
-    document.getElementById("howToPlay").style.display="none";
+    document.getElementById("guide").style.display="none";
 
 }
 
 
 
-function earth(){
+// 지진 버튼
+function earthPage(){
 
-    location.href="earth.html";
+    document.getElementById("main").style.display="none";
+
+    document.getElementById("earth").style.display="block";
 
 }
 
+
+
+// 돌아가기
+function backHome(){
+
+    document.getElementById("earth").style.display="none";
+
+    document.getElementById("main").style.display="flex";
+
+}
 
 
 </script>
-
 
 
 </body>

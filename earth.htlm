@@ -2,209 +2,302 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Earth Map</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" 
-href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<title>천재채호 - 실시간 지진 지도</title>
 
 <style>
 
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
+body{
+overflow:hidden;
+font-family:"Malgun Gothic";
+}
+
+
+/* 지도 화면 */
 #map{
-    width:100%;
-    height:100%;
+
+width:100vw;
+height:100vh;
+
+background:
+linear-gradient(#dfe3e5,#bfc5c8);
+
+position:relative;
+
 }
 
-.title{
-    position:absolute;
-    top:10px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:999;
-    background:black;
-    color:white;
-    padding:10px 25px;
-    border-radius:20px;
-    font-size:25px;
+
+
+/* 세계지도 느낌 배경 */
+#map:before{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background-image:
+
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='500'%3E%3Crect width='100%25' height='100%25' fill='%23cfd3d4'/%3E%3Cpath d='M100 180 Q300 50 500 180 T900 150' fill='none' stroke='%23999' stroke-width='40'/%3E%3C/svg%3E");
+
+background-size:cover;
+
+opacity:.5;
+
 }
+
+
+
+/* 제목 */
+#title{
+
+position:absolute;
+
+top:20px;
+
+left:20px;
+
+z-index:10;
+
+background:black;
+
+color:white;
+
+padding:15px;
+
+border-radius:10px;
+
+font-size:25px;
+
+}
+
+
+
+/* 지진 점 */
+
+.quake{
+
+position:absolute;
+
+background:red;
+
+border-radius:50%;
+
+box-shadow:
+0 0 10px red,
+0 0 25px red;
+
+animation:pulse 1s infinite;
+
+cursor:pointer;
+
+}
+
+
+
+@keyframes pulse{
+
+50%{
+
+transform:scale(1.8);
+
+}
+
+}
+
+
+
+#info{
+
+position:absolute;
+
+bottom:20px;
+
+left:20px;
+
+z-index:10;
+
+background:rgba(0,0,0,.7);
+
+color:white;
+
+padding:15px;
+
+border-radius:10px;
+
+}
+
+
 
 </style>
 
 </head>
 
 
+
 <body>
 
 
-<div class="title">
-🌍 EARTH EARTHQUAKE MAP
+<div id="map">
+
+
+<div id="title">
+🌎 천재채호 실시간 지진 지도
 </div>
 
 
-<div id="map"></div>
+<div id="info">
+데이터 불러오는 중...
+</div>
 
 
+</div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 
 <script>
 
 
-// 지도 생성
+const map=document.getElementById("map");
 
-const map=L.map("map").setView(
-[20,0],
-2
+const info=document.getElementById("info");
+
+
+
+
+// 위도 경도 → 화면 위치
+
+function position(lat,lon){
+
+
+return {
+
+x:(lon+180)/360*100,
+
+y:(90-lat)/180*100
+
+};
+
+
+}
+
+
+
+
+
+async function earthquake(){
+
+
+try{
+
+
+let url=
+"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+
+
+let data=
+await fetch(url).then(r=>r.json());
+
+
+
+document.querySelectorAll(".quake")
+.forEach(e=>e.remove());
+
+
+
+info.innerHTML=
+"최근 24시간 지진 : "
++data.features.length+
+"개";
+
+
+
+
+data.features.forEach(e=>{
+
+
+let lon=e.geometry.coordinates[0];
+
+let lat=e.geometry.coordinates[1];
+
+let mag=e.properties.mag;
+
+let place=e.properties.place;
+
+
+
+let p=position(lat,lon);
+
+
+
+let dot=document.createElement("div");
+
+
+dot.className="quake";
+
+
+
+dot.style.left=p.x+"%";
+
+dot.style.top=p.y+"%";
+
+
+
+let size=8+mag*5;
+
+
+dot.style.width=size+"px";
+
+dot.style.height=size+"px";
+
+
+
+dot.onclick=()=>{
+
+alert(
+"규모 : "+mag+
+"\n위치 : "+place
 );
 
-
-// 세계지도
-
-L.tileLayer(
-"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-{
-maxZoom:18
-}
-).addTo(map);
+};
 
 
 
+map.appendChild(dot);
 
-// 지진 데이터
-
-const earthquakes=[
-
-{
-name:"대한민국 서울",
-lat:37.5665,
-lng:126.978,
-power:3.5
-},
-
-{
-name:"일본 도쿄",
-lat:35.6762,
-lng:139.6503,
-power:5.2
-},
-
-{
-name:"미국 캘리포니아",
-lat:36.7783,
-lng:-119.4179,
-power:4.8
-},
-
-{
-name:"인도네시아",
-lat:-6.2,
-lng:106.8,
-power:6.0
-},
-
-{
-name:"칠레",
-lat:-33.4,
-lng:-70.6,
-power:5.5
-},
-
-{
-name:"터키",
-lat:39.9,
-lng:32.8,
-power:4.2
-}
-
-];
-
-
-
-
-// 지진 표시
-
-earthquakes.forEach(eq=>{
-
-
-let color;
-
-
-if(eq.power>=5){
-    color="red";
-}
-else{
-    color="orange";
-}
-
-
-
-let marker=L.circleMarker(
-[eq.lat,eq.lng],
-{
-
-radius:eq.power*3,
-
-color:color,
-
-fillColor:color,
-
-fillOpacity:0.7
-
-}
-
-)
-.addTo(map);
-
-
-
-marker.bindPopup(
-
-`
-<h3>🌋 지진 발생</h3>
-
-지역 : ${eq.name}<br>
-
-규모 : ${eq.power}
-
-`
-
-);
 
 
 });
 
 
+}
 
+catch(error){
 
-// 현재 위치 표시
+info.innerHTML=
+"지진 데이터를 가져올 수 없습니다.";
 
-navigator.geolocation?.getCurrentPosition(
-pos=>{
-
-
-L.marker([
-
-pos.coords.latitude,
-
-pos.coords.longitude
-
-])
-.addTo(map)
-.bindPopup("📍 현재 위치")
-.openPopup();
+}
 
 
 }
 
-);
+
+
+
+
+earthquake();
+
+
+// 60초마다 갱신
+
+setInterval(earthquake,60000);
 
 
 

@@ -18,14 +18,13 @@ body{
     font-family:"Malgun Gothic", sans-serif;
 }
 
-/* 움직이는 배경 */
+/* 움직이는 별 배경 */
 body::before{
     content:"";
     position:fixed;
     width:200%;
     height:200%;
-    background:
-        radial-gradient(white 1px, transparent 1px);
+    background:radial-gradient(white 1px, transparent 1px);
     background-size:50px 50px;
     opacity:0.15;
     animation:stars 40s linear infinite;
@@ -51,10 +50,7 @@ body::before{
 h1{
     font-size:80px;
     color:#ff3030;
-    text-shadow:
-        0 0 10px red,
-        0 0 20px red,
-        0 0 40px red;
+    text-shadow:0 0 10px red,0 0 20px red,0 0 40px red;
     margin-bottom:15px;
 }
 
@@ -68,6 +64,7 @@ p{
     font-size:22px;
     color:#ddd;
     margin-bottom:40px;
+    line-height:1.6;
 }
 
 button{
@@ -95,6 +92,27 @@ button:hover{
     color:#777;
     font-size:16px;
 }
+
+#howToPlay{
+    display:none;
+    margin-top:20px;
+    background:rgba(0,0,0,0.7);
+    padding:20px;
+    border-radius:15px;
+    border:2px solid red;
+}
+
+#howToPlay h3{
+    margin-bottom:10px;
+    color:gold;
+}
+
+#howToPlay button{
+    width:150px;
+    height:45px;
+    font-size:18px;
+    margin-top:15px;
+}
 </style>
 </head>
 
@@ -111,27 +129,53 @@ button:hover{
 총알을 피하고 승리를 쟁취하라!
 </p>
 
-<button onclick="alert('게임 시작!')">🎮 게임 시작</button>
+<!-- 게임 시작 -->
+<button onclick="startGame()">🎮 게임 시작</button>
 
-<button onclick="alert('조작법\n\nWASD : 이동\n마우스 : 조준\n좌클릭 : 발사\nShift : 대시')">
-📖 게임 방법
-</button>
+<!-- 게임 방법 -->
+<button onclick="showGuide()">📖 게임 방법</button>
 
-<button onclick="alert('설정은 준비 중입니다.')">
-⚙️ 설정
-</button>
+<!-- 설정 -->
+<button onclick="settings()">⚙️ 설정</button>
+
+<div id="howToPlay">
+<h3>게임 방법</h3>
+
+<p>
+W A S D : 이동<br>
+마우스 : 조준<br>
+좌클릭 : 총 발사<br>
+Shift : 대시
+</p>
+
+<button onclick="hideGuide()">닫기</button>
+
+</div>
 
 <div class="version">
 Made by 천재채호
 </div>
 
 </div>
-<button onclick="startGame()">
-    🎮 게임 시작
-</button>
 
 <script>
-function startGame() {
+function startGame(){
+    // main.html로 이동
     window.location.href = "main.html";
 }
+
+function showGuide(){
+    document.getElementById("howToPlay").style.display="block";
+}
+
+function hideGuide(){
+    document.getElementById("howToPlay").style.display="none";
+}
+
+function settings(){
+    alert("설정 기능은 추후 추가됩니다.");
+}
 </script>
+
+</body>
+</html>

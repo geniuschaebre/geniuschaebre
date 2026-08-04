@@ -18,7 +18,29 @@ font-family:"Malgun Gothic";
 }
 
 
-/* 지도 화면 */
+/* 지진 버튼 */
+#quakeBtn{
+position:absolute;
+top:20px;
+right:20px;
+z-index:20;
+
+background:#ff3333;
+color:white;
+
+border:none;
+padding:15px 25px;
+
+font-size:20px;
+font-weight:bold;
+
+border-radius:10px;
+cursor:pointer;
+}
+
+
+/* 지도 */
+
 #map{
 
 width:100vw;
@@ -32,8 +54,8 @@ position:relative;
 }
 
 
+/* 세계지도 느낌 */
 
-/* 세계지도 느낌 배경 */
 #map:before{
 
 content:"";
@@ -53,8 +75,8 @@ opacity:.5;
 }
 
 
-
 /* 제목 */
+
 #title{
 
 position:absolute;
@@ -78,8 +100,7 @@ font-size:25px;
 }
 
 
-
-/* 지진 점 */
+/* 지진 표시 */
 
 .quake{
 
@@ -100,7 +121,6 @@ cursor:pointer;
 }
 
 
-
 @keyframes pulse{
 
 50%{
@@ -112,6 +132,7 @@ transform:scale(1.8);
 }
 
 
+/* 정보 */
 
 #info{
 
@@ -134,14 +155,18 @@ border-radius:10px;
 }
 
 
-
 </style>
 
 </head>
 
 
-
 <body>
+
+
+<!-- 지진 버튼 -->
+<button id="quakeBtn" onclick="location.href='earth.html'">
+🌋 지진
+</button>
 
 
 <div id="map">
@@ -163,20 +188,15 @@ border-radius:10px;
 
 <script>
 
-
 const map=document.getElementById("map");
-
 const info=document.getElementById("info");
 
 
-
-
-// 위도 경도 → 화면 위치
+// 위도 경도 위치 변환
 
 function position(lat,lon){
 
-
-return {
+return{
 
 x:(lon+180)/360*100,
 
@@ -184,15 +204,13 @@ y:(90-lat)/180*100
 
 };
 
-
 }
 
 
 
-
+// 실시간 지진 데이터
 
 async function earthquake(){
-
 
 try{
 
@@ -218,7 +236,6 @@ info.innerHTML=
 
 
 
-
 data.features.forEach(e=>{
 
 
@@ -238,9 +255,7 @@ let p=position(lat,lon);
 
 let dot=document.createElement("div");
 
-
 dot.className="quake";
-
 
 
 dot.style.left=p.x+"%";
@@ -272,7 +287,6 @@ alert(
 map.appendChild(dot);
 
 
-
 });
 
 
@@ -290,15 +304,12 @@ info.innerHTML=
 
 
 
-
-
 earthquake();
 
 
-// 60초마다 갱신
+// 1분마다 갱신
 
 setInterval(earthquake,60000);
-
 
 
 </script>

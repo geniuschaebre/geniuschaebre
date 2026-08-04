@@ -1,1 +1,83 @@
+baseball-game/
+│
+├── index.html
+├── style.css
+├── script.js
+└── README.md
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>야구 게임</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<h1>⚾ 야구 게임</h1>
+
+<div id="score">
+    <h2>점수</h2>
+    <p>컴퓨터 : <span id="cpu">0</span></p>
+    <p>플레이어 : <span id="player">0</span></p>
+</div>
+
+<button id="hit">배트 휘두르기</button>
+
+<p id="result">게임 시작!</p>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+body{
+    font-family: Arial;
+    text-align:center;
+    background:#2e8b57;
+    color:white;
+}
+
+button{
+    padding:15px 30px;
+    font-size:20px;
+    margin-top:20px;
+    cursor:pointer;
+}
+
+#score{
+    background:white;
+    color:black;
+    width:250px;
+    margin:auto;
+    border-radius:10px;
+    padding:10px;
+}
+let player = 0;
+let cpu = 0;
+
+const result = document.getElementById("result");
+
+document.getElementById("hit").addEventListener("click", function(){
+
+    let hit = Math.floor(Math.random()*100)+1;
+
+    if(hit <= 10){
+        result.innerHTML = "💥 홈런!";
+        player += 4;
+    }
+    else if(hit <= 40){
+        result.innerHTML = "⚾ 안타!";
+        player += 1;
+    }
+    else if(hit <= 60){
+        result.innerHTML = "🚶 볼넷!";
+        player += 1;
+    }
+    else{
+        result.innerHTML = "❌ 아웃!";
+    }
+
+    cpu += Math.floor(Math.random()*2);
+
+    document.getElementById("player").innerHTML = player;
+    document.getElementById("cpu").innerHTML = cpu;
+});

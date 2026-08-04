@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boss Shooter</title>
 
 <style>
@@ -11,594 +10,399 @@ body{
     overflow:hidden;
     background:#111;
 }
-
 canvas{
     display:block;
     background:#222;
 }
 </style>
 </head>
+
 <body>
 
 <canvas id="game"></canvas>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
 
-const player = {
-    x: canvas.width/2,
-    y: canvas.height/2,
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+
+// 플레이어
+const player={
+    x:canvas.width/2,
+    y:canvas.height-150,
     width:40,
     height:40,
-    speed:5
+    speed:5,
+    hp:100
 };
 
-const keys = {};
 
-document.addEventListener("keydown",(e)=>{
-    keys[e.key.toLowerCase()] = true;
+// 키
+const keys={};
+
+addEventListener("keydown",e=>{
+    keys[e.key.toLowerCase()]=true;
 });
 
-document.addEventListener("keyup",(e)=>{
-    keys[e.key.toLowerCase()] = false;
+addEventListener("keyup",e=>{
+    keys[e.key.toLowerCase()]=false;
 });
 
-function update(){
 
-    // WASD 이동
-    if(keys["w"]) player.y -= player.speed;
-    if(keys["s"]) player.y += player.speed;
-    if(keys["a"]) player.x -= player.speed;
-    if(keys["d"]) player.x += player.speed;
-
-    // 방향키 이동
-    if(keys["arrowup"]) player.y -= player.speed;
-    if(keys["arrowdown"]) player.y += player.speed;
-    if(keys["arrowleft"]) player.x -= player.speed;
-    if(keys["arrowright"]) player.x += player.speed;
-
-    // 화면 밖으로 못 나가게
-    player.x = Math.max(0, Math.min(canvas.width-player.width, player.x));
-    player.y = Math.max(0, Math.min(canvas.height-player.height, player.y));
-}
-
-function draw(){
-
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // 플레이어
-    ctx.fillStyle="dodgerblue";
-    ctx.fillRect(player.x,player.y,player.width,player.height);
-
-}
-
-function gameLoop(){
-
-    update();
-    draw();
-
-    requestAnimationFrame(gameLoop);
-
-}
-
-gameLoop();
-
-window.addEventListener("resize",()=>{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
-</script>
-
-</body>
-</html>
-const mouse = {
-    x: canvas.width / 2,
-    y: canvas.height / 2
+// 마우스
+const mouse={
+    x:0,
+    y:0
 };
 
-canvas.addEventListener("mousemove", (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-});
-function draw(){
-
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // 플레이어
-    ctx.fillStyle = "dodgerblue";
-    ctx.fillRect(player.x, player.y, player.width, player.height);
-
-    // 플레이어 중심
-    const centerX = player.x + player.width / 2;
-    const centerY = player.y + player.height / 2;
-
-    // 마우스 방향 계산
-    const angle = Math.atan2(mouse.y - centerY, mouse.x - centerX);
-
-    // 총신 길이
-    const gunLength = 35;
-
-    // 총 끝 좌표
-    const gunX = centerX + Math.cos(angle) * gunLength;
-    const gunY = centerY + Math.sin(angle) * gunLength;
-
-    // 총신 그리기
-    ctx.strokeStyle = "yellow";
-    ctx.lineWidth = 6;
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(gunX, gunY);
-    ctx.stroke();
-
-    // 조준점(십자선)
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.moveTo(mouse.x - 10, mouse.y);
-    ctx.lineTo(mouse.x + 10, mouse.y);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(mouse.x, mouse.y - 10);
-    ctx.lineTo(mouse.x, mouse.y + 10);
-    ctx.stroke();
-}
-const bullets = [];
-canvas.addEventListener("mousedown", (e) => {
-
-    const centerX = player.x + player.width / 2;
-    const centerY = player.y + player.height / 2;
-
-    const angle = Math.atan2(
-        mouse.y - centerY,
-        mouse.x - centerX
-    );
-
-    bullets.push({
-        x: centerX,
-        y: centerY,
-        vx: Math.cos(angle) * 12,
-        vy: Math.sin(angle) * 12,
-        radius: 5
-    });
-
-});
-for(let i = bullets.length - 1; i >= 0; i--){
-
-    bullets[i].x += bullets[i].vx;
-    bullets[i].y += bullets[i].vy;
-
-    if(
-        bullets[i].x < 0 ||
-        bullets[i].x > canvas.width ||
-        bullets[i].y < 0 ||
-        bullets[i].y > canvas.height
-    ){
-        bullets.splice(i,1);
-    }
-
-}
-          ctx.fillStyle = "yellow";
-
-for(const bullet of bullets){
-
-    ctx.beginPath();
-    ctx.arc(
-        bullet.x,
-        bullet.y,
-        bullet.radius,
-        0,
-        Math.PI * 2
-    );
-    ctx.fill();
-
-}
-          const boss = {
-    x: canvas.width / 2 - 80,
-    y: 80,
-    width: 160,
-    height: 160,
-    hp: 100,
-    maxHp: 100,
-    alive: true
+canvas.onmousemove=e=>{
+    mouse.x=e.clientX;
+    mouse.y=e.clientY;
 };
-          // 보스
-if (boss.alive) {
-
-    // 몸체
-    ctx.fillStyle = "crimson";
-    ctx.fillRect(
-        boss.x,
-        boss.y,
-        boss.width,
-        boss.height
-    );
-
-    // 눈
-    ctx.fillStyle = "white";
-    ctx.beginPath();
-    ctx.arc(boss.x + 45, boss.y + 55, 10, 0, Math.PI * 2);
-    ctx.arc(boss.x + 115, boss.y + 55, 10, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 입
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(boss.x + 40, boss.y + 120);
-    ctx.lineTo(boss.x + 120, boss.y + 120);
-    ctx.stroke();
-
-}
-          if (boss.alive) {
-
-    const hpWidth = 300;
-
-    ctx.fillStyle = "gray";
-    ctx.fillRect(
-        canvas.width / 2 - hpWidth / 2,
-        20,
-        hpWidth,
-        25
-    );
-
-    ctx.fillStyle = "lime";
-    ctx.fillRect(
-        canvas.width / 2 - hpWidth / 2,
-        20,
-        hpWidth * (boss.hp / boss.maxHp),
-        25
-    );
-
-    ctx.strokeStyle = "white";
-    ctx.strokeRect(
-        canvas.width / 2 - hpWidth / 2,
-        20,
-        hpWidth,
-        25
-    );
-
-    ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
-    ctx.fillText(
-        "BOSS HP",
-        canvas.width / 2 - 35,
-        17
-    );
-}
-          let shooting = false;
-
-// 연사 속도(밀리초)
-const fireDelay = 120;
-
-// 마지막 발사 시간
-let lastShot = 0;
-          canvas.addEventListener("mousedown", () => {
-    shooting = true;
-});
-
-canvas.addEventListener("mouseup", () => {
-    shooting = false;
-});
-
-canvas.addEventListener("mouseleave", () => {
-    shooting = false;
-});
-          function shoot(){
-
-    const centerX = player.x + player.width / 2;
-    const centerY = player.y + player.height / 2;
-
-    const angle = Math.atan2(
-        mouse.y - centerY,
-        mouse.x - centerX
-    );
-
-    bullets.push({
-        x: centerX,
-        y: centerY,
-        vx: Math.cos(angle) * 12,
-        vy: Math.sin(angle) * 12,
-        radius: 5
-    });
-
-}
-          const now = Date.now();
-
-if (shooting && now - lastShot >= fireDelay) {
-    shoot();
-    lastShot = now;
-}
-          const fireDelay = 200; // 느림 (초당 약 5발)
-const fireDelay = 120; // 보통
-const fireDelay = 60;  // 빠름 (초당 약 16발)
-const fireDelay = 30;  // 기관총 수준
-        const boss = {
-    x: canvas.width / 2 - 80,
-    y: 80,
-    width: 160,
-    height: 160,
-    hp: 100,
-    maxHp: 100,
-    alive: true,
-    damage: 10
-};
-            function checkBulletBossCollision(){
-
-    if(!boss.alive) return;
-
-    for(let i = bullets.length - 1; i >= 0; i--){
-
-        const bullet = bullets[i];
-
-        // 총알과 보스 사각형 충돌 확인
-        if(
-            bullet.x > boss.x &&
-            bullet.x < boss.x + boss.width &&
-            bullet.y > boss.y &&
-            bullet.y < boss.y + boss.height
-        ){
-
-            // 보스 데미지
-            boss.hp -= boss.damage;
-
-            // 맞은 총알 제거
-            bullets.splice(i,1);
 
 
-            // 보스 사망
-            if(boss.hp <= 0){
-
-                boss.hp = 0;
-                boss.alive = false;
-
-                alert("🎉 보스 처치 성공!");
-
-            }
-        }
-    }
-}
-                checkBulletBossCollision();
-                function update(){
-
-    playerMove();
-
-    bulletMove();
-
-    checkBulletBossCollision();
-
-}
-                hit:0
-                boss.hit = 5;
-                if(boss.hit > 0){
-    ctx.fillStyle="white";
-    boss.hit--;
-}
-else{
-    ctx.fillStyle="crimson";
-}
-                // 보스 체력바
-if (boss.alive) {
-
-    const barWidth = 400;
-    const barHeight = 30;
-
-    const x = canvas.width / 2 - barWidth / 2;
-    const y = 30;
-
-    // 배경(빨간색)
-    ctx.fillStyle = "darkred";
-    ctx.fillRect(
-        x,
-        y,
-        barWidth,
-        barHeight
-    );
-
-    // 현재 HP
-    ctx.fillStyle = "lime";
-    ctx.fillRect(
-        x,
-        y,
-        barWidth * (boss.hp / boss.maxHp),
-        barHeight
-    );
-
-    // 테두리
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(
-        x,
-        y,
-        barWidth,
-        barHeight
-    );
+// 총알
+const bullets=[];
 
 
-    // 글자
-    ctx.fillStyle = "white";
-    ctx.font = "24px Arial";
-    ctx.textAlign = "center";
-
-    ctx.fillText(
-        "BOSS  " + boss.hp + " / " + boss.maxHp,
-        canvas.width / 2,
-        y + 23
-    );
-
-}
-                const boss = {
-    x: canvas.width / 2 - 80,
-    y: 80,
+// 보스
+const boss={
+    x:canvas.width/2-80,
+    y:80,
     width:160,
     height:160,
-
     hp:1000,
     maxHp:1000,
-
-    alive:true
-};
-                const enemyBullets = [];
-                const boss = {
-    x: canvas.width / 2 - 80,
-    y: 80,
-    width:160,
-    height:160,
-
-    hp:1000,
-    maxHp:1000,
-
     alive:true,
-
-    attackDelay:1000,
-    lastAttack:0
+    attackTime:0
 };
-                function bossAttack(){
-
-    if(!boss.alive) return;
 
 
-    const now = Date.now();
-
-    if(now - boss.lastAttack < boss.attackDelay){
-        return;
-    }
+// 보스 총알
+const enemyBullets=[];
 
 
-    boss.lastAttack = now;
+// 연사
+let shooting=false;
+let lastShot=0;
+const fireDelay=120;
 
 
-    // 보스 중심
-    const bossX = boss.x + boss.width/2;
-    const bossY = boss.y + boss.height/2;
+canvas.onmousedown=()=>{
+    shooting=true;
+};
+
+canvas.onmouseup=()=>{
+    shooting=false;
+};
 
 
-    // 플레이어 방향 계산
-    const angle = Math.atan2(
-        player.y + player.height/2 - bossY,
-        player.x + player.width/2 - bossX
-    );
+// 이동
+function move(){
+
+    if(keys["w"])player.y-=player.speed;
+    if(keys["s"])player.y+=player.speed;
+    if(keys["a"])player.x-=player.speed;
+    if(keys["d"])player.x+=player.speed;
 
 
-    enemyBullets.push({
+    player.x=Math.max(0,
+    Math.min(canvas.width-player.width,player.x));
 
-        x:bossX,
-        y:bossY,
-
-        vx:Math.cos(angle)*6,
-        vy:Math.sin(angle)*6,
-
-        radius:10
-
-    });
+    player.y=Math.max(0,
+    Math.min(canvas.height-player.height,player.y));
 
 }
-        function update(){
-
-    playerMove();
-
-    bulletMove();
-
-    checkBulletBossCollision();
-
-    bossAttack();
-
-}
-        for(let i = enemyBullets.length-1; i>=0; i--){
-
-    enemyBullets[i].x += enemyBullets[i].vx;
-    enemyBullets[i].y += enemyBullets[i].vy;
 
 
-    // 화면 밖 제거
-    if(
-        enemyBullets[i].x < 0 ||
-        enemyBullets[i].x > canvas.width ||
-        enemyBullets[i].y < 0 ||
-        enemyBullets[i].y > canvas.height
-    ){
-        enemyBullets.splice(i,1);
-    }
+// 발사
+function shoot(){
+
+let angle=Math.atan2(
+mouse.y-(player.y+20),
+mouse.x-(player.x+20)
+);
+
+
+bullets.push({
+
+x:player.x+20,
+y:player.y+20,
+
+vx:Math.cos(angle)*12,
+vy:Math.sin(angle)*12
+
+});
 
 }
-            ctx.fillStyle="red";
 
-for(const bullet of enemyBullets){
 
-    ctx.beginPath();
+// 총알 이동
+function bulletMove(){
 
-    ctx.arc(
-        bullet.x,
-        bullet.y,
-        bullet.radius,
-        0,
-        Math.PI*2
-    );
+for(let i=bullets.length-1;i>=0;i--){
 
-    ctx.fill();
+let b=bullets[i];
 
-}
-            let gameClear = false;
-            function bossDefeated(){
+b.x+=b.vx;
+b.y+=b.vy;
 
-    boss.alive = false;
-    gameClear = true;
 
-    // 남아있는 보스 총알 제거
-    enemyBullets.length = 0;
+if(b.x<0||b.x>canvas.width||
+b.y<0||b.y>canvas.height){
+
+bullets.splice(i,1);
 
 }
-            boss.hp -= 10;
+
+}
+
+}
+
+
+// 보스 충돌
+function hitBoss(){
+
+if(!boss.alive)return;
+
+
+for(let i=bullets.length-1;i>=0;i--){
+
+let b=bullets[i];
+
+
+if(
+b.x>boss.x &&
+b.x<boss.x+boss.width &&
+b.y>boss.y &&
+b.y<boss.y+boss.height
+){
+
+boss.hp-=10;
 
 bullets.splice(i,1);
 
 
-// 보스 처치
-if(boss.hp <= 0){
+if(boss.hp<=0){
 
-    boss.hp = 0;
-
-    bossDefeated();
+boss.hp=0;
+boss.alive=false;
 
 }
-    if(gameClear){
-
-    ctx.fillStyle="rgba(0,0,0,0.7)";
-    ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-
-    ctx.fillStyle="gold";
-    ctx.font="70px Arial";
-    ctx.textAlign="center";
-
-    ctx.fillText(
-        "🏆 BOSS CLEAR!",
-        canvas.width/2,
-        canvas.height/2
-    );
-
-
-    ctx.fillStyle="white";
-    ctx.font="30px Arial";
-
-    ctx.fillText(
-        "최종 보스를 처치했습니다!",
-        canvas.width/2,
-        canvas.height/2+60
-    );
 
 }
-    explode:0
-    boss.explode = 30;
-                
-      
+
+}
+
+}
+
+
+// 보스 공격
+function bossAttack(){
+
+if(!boss.alive)return;
+
+
+let now=Date.now();
+
+
+if(now-boss.attackTime>1000){
+
+boss.attackTime=now;
+
+
+let angle=Math.atan2(
+player.y-boss.y,
+player.x-boss.x
+);
+
+
+enemyBullets.push({
+
+x:boss.x+80,
+y:boss.y+80,
+
+vx:Math.cos(angle)*5,
+vy:Math.sin(angle)*5
+
+});
+
+
+}
+
+}
+
+
+// 보스 총알 이동
+function enemyMove(){
+
+for(let i=enemyBullets.length-1;i>=0;i--){
+
+let b=enemyBullets[i];
+
+b.x+=b.vx;
+b.y+=b.vy;
+
+
+if(b.x<0||b.x>canvas.width||
+b.y<0||b.y>canvas.height){
+
+enemyBullets.splice(i,1);
+
+}
+
+}
+
+}
+
+
+// 그리기
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+
+// 플레이어
+ctx.fillStyle="cyan";
+ctx.fillRect(
+player.x,
+player.y,
+player.width,
+player.height
+);
+
+
+// 총구
+let angle=Math.atan2(
+mouse.y-(player.y+20),
+mouse.x-(player.x+20)
+);
+
+ctx.strokeStyle="yellow";
+ctx.lineWidth=5;
+
+ctx.beginPath();
+ctx.moveTo(player.x+20,player.y+20);
+ctx.lineTo(
+player.x+20+Math.cos(angle)*40,
+player.y+20+Math.sin(angle)*40
+);
+ctx.stroke();
+
+
+
+// 총알
+ctx.fillStyle="yellow";
+
+bullets.forEach(b=>{
+
+ctx.beginPath();
+ctx.arc(b.x,b.y,5,0,Math.PI*2);
+ctx.fill();
+
+});
+
+
+// 보스
+if(boss.alive){
+
+ctx.fillStyle="red";
+ctx.fillRect(
+boss.x,
+boss.y,
+boss.width,
+boss.height
+);
+
+
+// HP바
+
+ctx.fillStyle="gray";
+ctx.fillRect(100,20,400,30);
+
+ctx.fillStyle="lime";
+ctx.fillRect(
+100,
+20,
+400*(boss.hp/boss.maxHp),
+30
+);
+
+}
+
+
+// 보스 총알
+
+ctx.fillStyle="orange";
+
+enemyBullets.forEach(b=>{
+
+ctx.beginPath();
+ctx.arc(b.x,b.y,10,0,Math.PI*2);
+ctx.fill();
+
+});
+
+
+
+// 승리
+
+if(!boss.alive){
+
+ctx.fillStyle="white";
+ctx.font="70px Arial";
+ctx.fillText(
+"🏆 BOSS CLEAR!",
+canvas.width/2-250,
+canvas.height/2
+);
+
+}
+
+}
+
+
+// 게임 루프
+function loop(){
+
+move();
+
+
+let now=Date.now();
+
+if(shooting && now-lastShot>fireDelay){
+
+shoot();
+lastShot=now;
+
+}
+
+
+bulletMove();
+
+hitBoss();
+
+bossAttack();
+
+enemyMove();
+
+
+draw();
+
+
+requestAnimationFrame(loop);
+
+}
+
+
+loop();
+
+
+</script>
+
+</body>
+</html>

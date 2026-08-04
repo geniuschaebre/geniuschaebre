@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>천재채호 - 보스전</title>
 
 <style>
@@ -15,25 +16,31 @@
 body{
     background:linear-gradient(#111,#000);
     overflow:hidden;
-    font-family:"Malgun Gothic", sans-serif;
+    font-family:"Malgun Gothic",sans-serif;
 }
 
-/* 움직이는 별 배경 */
+
+/* 별 배경 */
 body::before{
     content:"";
     position:fixed;
     width:200%;
     height:200%;
-    background:radial-gradient(white 1px, transparent 1px);
+    background:radial-gradient(white 1px,transparent 1px);
     background-size:50px 50px;
     opacity:0.15;
     animation:stars 40s linear infinite;
 }
 
 @keyframes stars{
-    from{transform:translateY(0);}
-    to{transform:translateY(-500px);}
+    from{
+        transform:translateY(0);
+    }
+    to{
+        transform:translateY(-500px);
+    }
 }
+
 
 .menu{
     position:absolute;
@@ -47,12 +54,17 @@ body::before{
     text-align:center;
 }
 
+
 h1{
     font-size:80px;
     color:#ff3030;
-    text-shadow:0 0 10px red,0 0 20px red,0 0 40px red;
+    text-shadow:
+    0 0 10px red,
+    0 0 20px red,
+    0 0 40px red;
     margin-bottom:15px;
 }
+
 
 h2{
     font-size:38px;
@@ -60,81 +72,140 @@ h2{
     margin-bottom:30px;
 }
 
+
 p{
     font-size:22px;
     color:#ddd;
-    margin-bottom:40px;
     line-height:1.6;
+    margin-bottom:40px;
 }
+
+
 
 button{
+
     width:260px;
     height:65px;
+
     margin:10px;
+
     font-size:24px;
+
     border:none;
+
     border-radius:15px;
+
     cursor:pointer;
+
     background:#ff3030;
+
     color:white;
-    transition:.25s;
+
     box-shadow:0 0 15px red;
+
+    transition:.25s;
 }
+
 
 button:hover{
+
     transform:scale(1.08);
+
     background:#ff5a5a;
+
 }
 
-.version{
-    position:absolute;
-    bottom:20px;
-    color:#777;
-    font-size:16px;
-}
+
 
 #howToPlay{
+
     display:none;
-    margin-top:20px;
-    background:rgba(0,0,0,0.7);
+
+    background:rgba(0,0,0,0.8);
+
     padding:20px;
+
     border-radius:15px;
+
     border:2px solid red;
+
 }
+
+
 
 #howToPlay h3{
-    margin-bottom:10px;
+
     color:gold;
+
+    margin-bottom:10px;
+
 }
 
+
+
 #howToPlay button{
+
     width:150px;
+
     height:45px;
+
     font-size:18px;
-    margin-top:15px;
+
 }
+
+
+
+.version{
+
+    position:absolute;
+
+    bottom:20px;
+
+    color:#777;
+
+    font-size:16px;
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="menu">
+
 
 <h1>천재채호</h1>
 
+
 <h2>⚔️ BOSS SHOOTER ⚔️</h2>
+
 
 <p>
 최강의 보스를 물리쳐라!<br>
 총알을 피하고 승리를 쟁취하라!
 </p>
 
-<button onclick="startGame()">🎮 게임 시작</button>
 
-<button onclick="showGuide()">📖 게임 방법</button>
 
-<!-- earth.html 이동 버튼 -->
-<button onclick="earth()">🌎 지진</button>
+<button onclick="startGame()">
+🎮 게임 시작
+</button>
+
+
+<button onclick="showGuide()">
+📖 게임 방법
+</button>
+
+
+<button onclick="earth()">
+🌎 지진
+</button>
+
+
 
 <div id="howToPlay">
 
@@ -147,40 +218,62 @@ W A S D : 이동<br>
 Shift : 대시
 </p>
 
-<button onclick="hideGuide()">닫기</button>
+
+<button onclick="hideGuide()">
+닫기
+</button>
 
 </div>
+
+
 
 <div class="version">
 Made by 천재채호
 </div>
 
+
 </div>
+
 
 
 <script>
 
+
 function startGame(){
-    window.location.href="main.html";
+
+    location.href="main.html";
+
 }
+
 
 
 function showGuide(){
+
     document.getElementById("howToPlay").style.display="block";
+
 }
+
 
 
 function hideGuide(){
+
     document.getElementById("howToPlay").style.display="none";
+
 }
 
 
-// 지진 버튼 → earth.html 이동
+
 function earth(){
-    window.location.href="earth.html";
+
+    location.href="earth.html";
+
 }
+
+
 
 </script>
+
+
 
 </body>
 </html>

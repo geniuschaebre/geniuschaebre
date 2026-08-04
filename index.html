@@ -7,100 +7,110 @@
 <title>천재채호 - 보스전</title>
 
 <style>
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-    background:#000;
-    overflow:hidden;
-    font-family:"Malgun Gothic",sans-serif;
-    color:white;
+background:#000;
+color:white;
+font-family:"Malgun Gothic";
+overflow:hidden;
 }
 
 
 .menu{
-    width:100%;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+
+width:100%;
+height:100vh;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+text-align:center;
+
 }
 
 
 h1{
-    font-size:80px;
-    color:red;
-    text-shadow:0 0 20px red;
+
+font-size:80px;
+
+color:red;
+
+text-shadow:0 0 20px red;
+
 }
 
 
 h2{
-    color:gold;
-    font-size:38px;
-    margin:20px;
+
+color:gold;
+
+font-size:38px;
+
+margin:20px;
+
 }
 
 
 p{
-    font-size:22px;
-    margin:20px;
+
+font-size:22px;
+
+margin:20px;
+
 }
 
 
 button{
-    width:260px;
-    height:65px;
-    margin:10px;
-    font-size:24px;
-    border:none;
-    border-radius:15px;
-    background:red;
-    color:white;
-    cursor:pointer;
+
+width:260px;
+
+height:65px;
+
+margin:10px;
+
+font-size:24px;
+
+border:none;
+
+border-radius:15px;
+
+background:red;
+
+color:white;
+
+cursor:pointer;
+
 }
 
 
 button:hover{
-    transform:scale(1.1);
+
+transform:scale(1.1);
+
 }
 
 
 #guide{
-    display:none;
-    background:#222;
-    border:2px solid red;
-    padding:20px;
-    border-radius:15px;
+
+display:none;
+
+background:#222;
+
+border:2px solid red;
+
+padding:20px;
+
+border-radius:15px;
+
 }
-
-
-#earth{
-    display:none;
-    width:100%;
-    height:100vh;
-    background:
-    linear-gradient(#001,#004),
-    url("https://upload.wikimedia.org/wikipedia/commons/8/83/Earthmap1000x500.jpg");
-    background-size:cover;
-    text-align:center;
-    padding-top:200px;
-}
-
-
-#earth h1{
-    color:cyan;
-}
-
-
-.back{
-    background:blue;
-}
-
 
 </style>
 
@@ -110,9 +120,7 @@ button:hover{
 <body>
 
 
-<!-- 메인 화면 -->
-
-<div class="menu" id="main">
+<div class="menu">
 
 
 <h1>천재채호</h1>
@@ -160,65 +168,32 @@ Shift : 대시
 닫기
 </button>
 
-
 </div>
 
 
 </div>
 
-
-
-
-
-<!-- 지진 화면 -->
-
-<div id="earth">
 
 
 <script>
 
-
 function startGame(){
 
-    alert("main 게임 시작!");
+alert("게임 시작!");
 
 }
-
 
 
 function showGuide(){
 
-    document.getElementById("guide").style.display="block";
+document.getElementById("guide").style.display="block";
 
 }
-
 
 
 function hideGuide(){
 
-    document.getElementById("guide").style.display="none";
-
-}
-
-
-
-// 지진 버튼
-function earthPage(){
-
-    document.getElementById("main").style.display="none";
-
-    document.getElementById("earth").style.display="block";
-
-}
-
-
-
-// 돌아가기
-function backHome(){
-
-    document.getElementById("earth").style.display="none";
-
-    document.getElementById("main").style.display="flex";
+document.getElementById("guide").style.display="none";
 
 }
 

@@ -318,5 +318,287 @@ if (shooting && now - lastShot >= fireDelay) {
 const fireDelay = 120; // 보통
 const fireDelay = 60;  // 빠름 (초당 약 16발)
 const fireDelay = 30;  // 기관총 수준
-          
+        const boss = {
+    x: canvas.width / 2 - 80,
+    y: 80,
+    width: 160,
+    height: 160,
+    hp: 100,
+    maxHp: 100,
+    alive: true,
+    damage: 10
+};
+            function checkBulletBossCollision(){
+
+    if(!boss.alive) return;
+
+    for(let i = bullets.length - 1; i >= 0; i--){
+
+        const bullet = bullets[i];
+
+        // 총알과 보스 사각형 충돌 확인
+        if(
+            bullet.x > boss.x &&
+            bullet.x < boss.x + boss.width &&
+            bullet.y > boss.y &&
+            bullet.y < boss.y + boss.height
+        ){
+
+            // 보스 데미지
+            boss.hp -= boss.damage;
+
+            // 맞은 총알 제거
+            bullets.splice(i,1);
+
+
+            // 보스 사망
+            if(boss.hp <= 0){
+
+                boss.hp = 0;
+                boss.alive = false;
+
+                alert("🎉 보스 처치 성공!");
+
+            }
+        }
+    }
+}
+                checkBulletBossCollision();
+                function update(){
+
+    playerMove();
+
+    bulletMove();
+
+    checkBulletBossCollision();
+
+}
+                hit:0
+                boss.hit = 5;
+                if(boss.hit > 0){
+    ctx.fillStyle="white";
+    boss.hit--;
+}
+else{
+    ctx.fillStyle="crimson";
+}
+                // 보스 체력바
+if (boss.alive) {
+
+    const barWidth = 400;
+    const barHeight = 30;
+
+    const x = canvas.width / 2 - barWidth / 2;
+    const y = 30;
+
+    // 배경(빨간색)
+    ctx.fillStyle = "darkred";
+    ctx.fillRect(
+        x,
+        y,
+        barWidth,
+        barHeight
+    );
+
+    // 현재 HP
+    ctx.fillStyle = "lime";
+    ctx.fillRect(
+        x,
+        y,
+        barWidth * (boss.hp / boss.maxHp),
+        barHeight
+    );
+
+    // 테두리
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(
+        x,
+        y,
+        barWidth,
+        barHeight
+    );
+
+
+    // 글자
+    ctx.fillStyle = "white";
+    ctx.font = "24px Arial";
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+        "BOSS  " + boss.hp + " / " + boss.maxHp,
+        canvas.width / 2,
+        y + 23
+    );
+
+}
+                const boss = {
+    x: canvas.width / 2 - 80,
+    y: 80,
+    width:160,
+    height:160,
+
+    hp:1000,
+    maxHp:1000,
+
+    alive:true
+};
+                const enemyBullets = [];
+                const boss = {
+    x: canvas.width / 2 - 80,
+    y: 80,
+    width:160,
+    height:160,
+
+    hp:1000,
+    maxHp:1000,
+
+    alive:true,
+
+    attackDelay:1000,
+    lastAttack:0
+};
+                function bossAttack(){
+
+    if(!boss.alive) return;
+
+
+    const now = Date.now();
+
+    if(now - boss.lastAttack < boss.attackDelay){
+        return;
+    }
+
+
+    boss.lastAttack = now;
+
+
+    // 보스 중심
+    const bossX = boss.x + boss.width/2;
+    const bossY = boss.y + boss.height/2;
+
+
+    // 플레이어 방향 계산
+    const angle = Math.atan2(
+        player.y + player.height/2 - bossY,
+        player.x + player.width/2 - bossX
+    );
+
+
+    enemyBullets.push({
+
+        x:bossX,
+        y:bossY,
+
+        vx:Math.cos(angle)*6,
+        vy:Math.sin(angle)*6,
+
+        radius:10
+
+    });
+
+}
+        function update(){
+
+    playerMove();
+
+    bulletMove();
+
+    checkBulletBossCollision();
+
+    bossAttack();
+
+}
+        for(let i = enemyBullets.length-1; i>=0; i--){
+
+    enemyBullets[i].x += enemyBullets[i].vx;
+    enemyBullets[i].y += enemyBullets[i].vy;
+
+
+    // 화면 밖 제거
+    if(
+        enemyBullets[i].x < 0 ||
+        enemyBullets[i].x > canvas.width ||
+        enemyBullets[i].y < 0 ||
+        enemyBullets[i].y > canvas.height
+    ){
+        enemyBullets.splice(i,1);
+    }
+
+}
+            ctx.fillStyle="red";
+
+for(const bullet of enemyBullets){
+
+    ctx.beginPath();
+
+    ctx.arc(
+        bullet.x,
+        bullet.y,
+        bullet.radius,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+}
+            let gameClear = false;
+            function bossDefeated(){
+
+    boss.alive = false;
+    gameClear = true;
+
+    // 남아있는 보스 총알 제거
+    enemyBullets.length = 0;
+
+}
+            boss.hp -= 10;
+
+bullets.splice(i,1);
+
+
+// 보스 처치
+if(boss.hp <= 0){
+
+    boss.hp = 0;
+
+    bossDefeated();
+
+}
+    if(gameClear){
+
+    ctx.fillStyle="rgba(0,0,0,0.7)";
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.fillStyle="gold";
+    ctx.font="70px Arial";
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "🏆 BOSS CLEAR!",
+        canvas.width/2,
+        canvas.height/2
+    );
+
+
+    ctx.fillStyle="white";
+    ctx.font="30px Arial";
+
+    ctx.fillText(
+        "최종 보스를 처치했습니다!",
+        canvas.width/2,
+        canvas.height/2+60
+    );
+
+}
+    explode:0
+    boss.explode = 30;
+                
       
